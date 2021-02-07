@@ -15,12 +15,12 @@ def run():
     clock = pygame.time.Clock()
     pygame.display.set_caption("Multris")
 
-    network = Network("Ramiz")
+    player = 1
+    network = Network(1 - player, "Ramiz")  # Other player is 1 - player
     network.run()
     network.discover()
-    game = Tetris()
+    game = Tetris(network)
     display = Display()
-    player = 0
 
     # Loop until the user clicks the close button.
     pressing_down = [False, False]
@@ -67,7 +67,7 @@ def run():
                     game.go_space(1 - player)
 
                 if event.key == pygame.K_ESCAPE:
-                    game.__init__()
+                    game.__init__(network)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:

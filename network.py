@@ -6,14 +6,16 @@ from concurrent.futures.thread import ThreadPoolExecutor
 
 from constants import local_port, buffer_size
 from packet import Packet, PacketType
+from tetris import Tetris
 
 
 class Network:
     local_ip = ""
     # IP of the other player
     remote_ip = ""
+    game: Tetris = None
 
-    def __init__(self, name="Unanimous"):
+    def __init__(self, other_player: int, name="Unanimous"):
         self.executor = ThreadPoolExecutor()
 
         self.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -24,6 +26,7 @@ class Network:
         self.local_ip = self.get_ip()
         self.remote_address = None
         self.shutdown = False
+        self.other_player = other_player
 
     @staticmethod
     def get_ip():
@@ -57,6 +60,12 @@ class Network:
         udp_server_thread = threading.Thread(target=self.udp_server)
         udp_server_thread.start()
 
+    # This function is the result of the bad code and my lack of understanding of
+    # static concept in python. Basically it connects singleton game and network
+    # instances. Much better way to do this was to make them static.
+    def connect_network_module_with_game_instance(self, game: Tetris):
+        self.game = game
+
     def handle_udp_packet(self, bytes_packet, address):
         packet = pickle.loads(bytes_packet)
         if packet.packet_type == PacketType.DISCOVER:
@@ -69,3 +78,5 @@ class Network:
             print(self.remote_address)
         if packet.packet_type == PacketType.QUIT:
             self.shutdown = True
+        if packet.packet_type == PacketType.FIGURE:
+            self.game.figures[self.other_player] = packet

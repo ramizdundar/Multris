@@ -13,3 +13,4 @@ class PacketType(Enum):
     DISCOVER = 0
     RESPOND = 1
     QUIT = 2
+    FIGURE = 3

@@ -2,6 +2,8 @@ from typing import List
 
 from constants import tetris_x, tetris_y, tetris_zoom, tetris_level, tetris_height, tetris_width
 from figure import Figure
+from network import Network
+from packet import Packet, PacketType
 
 
 class Tetris:
@@ -18,11 +20,15 @@ class Tetris:
     state: str
     field: List[List[int]]
     figures: List[Figure] = [None, None]
+    network: Network
 
-    def __init__(self):
+    def __init__(self, network):
         self.field = []
         self.score = 0
         self.state = "start"
+        self.network = network
+        self.network.connect_network_module_with_game_instance(self)
+
         for i in range(tetris_height):
             new_line = []
             for j in range(tetris_width):
@@ -92,3 +98,7 @@ class Tetris:
         self.figures[ix].rotate()
         if self.intersects(ix):
             self.figures[ix].rotation = old_rotation
+        self.update_remote(ix)
+
+    def update_remote(self, ix):
+        self.network.send_udp_packet(Packet(PacketType.FIGURE, self.figures[ix]), self.network.remote_address)
