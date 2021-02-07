@@ -60,6 +60,7 @@ def run():
 
                 if event.key == pygame.K_ESCAPE:
                     game.__init__(network)
+                    game.new_figure(player.player)
 
                 if event.key == pygame.K_r:
                     game.state = "ready"
