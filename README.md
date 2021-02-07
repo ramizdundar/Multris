@@ -8,10 +8,10 @@ Python 3 is required. Pygame is also required by I highly suggest running the co
 ```
 git clone https://github.com/ramizdundar/Multris.git
 cd Multris
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
-pip install --upgrade pip
-pip install pygame
+pip3 install --upgrade pip
+pip3 install pygame
 ```
 
 ## Run
