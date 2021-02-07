@@ -2,7 +2,8 @@ import os
 
 import pygame
 
-from constants import fps, local_port, player
+import player
+from constants import fps, local_port
 from display import Display
 from network import Network
 from packet import Packet, PacketType
@@ -15,7 +16,7 @@ def run():
     clock = pygame.time.Clock()
     pygame.display.set_caption("Multris")
 
-    network = Network(1 - player, "Ramiz")  # Other player is 1 - player
+    network = Network(1 - player.player, "Ramiz")  # Other player is 1 - player
     network.run()
     network.discover()
     game = Tetris(network)
@@ -30,11 +31,11 @@ def run():
         counter += 1
         if counter > 100000:
             counter = 0
-
+        print(player.player)
         for ix in range(2):
             if game.figures[ix] is None:
                 game.new_figure(ix)
-            if (counter % (fps // game.level // 2) == 0 and ix == player) or pressing_down[ix]:
+            if (counter % (fps // game.level // 2) == 0 and ix == player.player) or pressing_down[ix]:
                 if game.state == "start":
                     game.go_down(ix)
 
@@ -44,35 +45,35 @@ def run():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    game.rotate(player)
+                    game.rotate(player.player)
                 if event.key == pygame.K_DOWN:
-                    pressing_down[player] = True
+                    pressing_down[player.player] = True
                 if event.key == pygame.K_LEFT:
-                    game.go_side(-1, player)
+                    game.go_side(-1, player.player)
                 if event.key == pygame.K_RIGHT:
-                    game.go_side(1, player)
+                    game.go_side(1, player.player)
                 if event.key == pygame.K_SPACE:
-                    game.go_space(player)
+                    game.go_space(player.player)
 
                 if event.key == pygame.K_w:
-                    game.rotate(1 - player)
+                    game.rotate(1 - player.player)
                 if event.key == pygame.K_s:
-                    pressing_down[1 - player] = True
+                    pressing_down[1 - player.player] = True
                 if event.key == pygame.K_a:
-                    game.go_side(-1, 1 - player)
+                    game.go_side(-1, 1 - player.player)
                 if event.key == pygame.K_d:
-                    game.go_side(1, 1 - player)
+                    game.go_side(1, 1 - player.player)
                 if event.key == pygame.K_TAB:
-                    game.go_space(1 - player)
+                    game.go_space(1 - player.player)
 
                 if event.key == pygame.K_ESCAPE:
                     game.__init__(network)
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
-                    pressing_down[player] = False
+                    pressing_down[player.player] = False
                 if event.key == pygame.K_s:
-                    pressing_down[1 - player] = False
+                    pressing_down[1 - player.player] = False
 
         display.display(game.score, game.state, game.figures, game.field)
         clock.tick(fps)

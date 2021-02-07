@@ -4,7 +4,8 @@ import subprocess
 import threading
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from constants import local_port, buffer_size, change_player
+import player
+from constants import local_port, buffer_size
 from packet import Packet, PacketType
 
 
@@ -51,7 +52,6 @@ class Network:
 
     def discover(self):
         packet = Packet(PacketType.DISCOVER)
-        # address = ("<broadcast>", local_port) TODO: Fix broadcast
         address = ("<broadcast>", local_port)
         self.send_udp_packet(packet, address)
         self.send_udp_packet(packet, address)
@@ -71,7 +71,7 @@ class Network:
 
     def handle_udp_packet(self, bytes_packet, address):
         packet = pickle.loads(bytes_packet)
-        print("RECEIVED: " + str(packet.packet_type) + " FROM " + str(self.remote_address))
+        print("RECEIVED: " + str(packet.packet_type) + " FROM " + str(address))
         if packet.packet_type == PacketType.DISCOVER:
             if self.local_ip != address[0]:
                 self.remote_ip = address[0]
@@ -80,7 +80,8 @@ class Network:
         if packet.packet_type == PacketType.RESPOND:
             self.remote_ip = address[0]
             self.remote_address = (self.remote_ip, local_port)
-            self.other_player = 1 - change_player()
+            player.player = 1
+            self.other_player = 0
         if packet.packet_type == PacketType.QUIT:
             self.shutdown = True
         if packet.packet_type == PacketType.FIGURE:

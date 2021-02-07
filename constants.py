@@ -1,8 +1,8 @@
 # Figure colors
 colors = [
     (0, 0, 0),
-    (120, 37, 179),
-    (100, 179, 179),
+    (120, 37, 179),  # Purple
+    (100, 179, 179),  # Teal
     (80, 34, 22),
     (80, 134, 22),
     (180, 34, 22),
@@ -29,11 +29,3 @@ fps = 30
 
 local_port = 20001
 buffer_size = 1024
-
-player = 0
-
-
-def change_player():
-    global player
-    player = 1 - player
-    return player
