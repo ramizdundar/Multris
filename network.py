@@ -31,11 +31,11 @@ class Network:
 
     @staticmethod
     def get_ip():
-        cmd_get_ip = "ifconfig | grep netmask"
-        out, err = subprocess.Popen(cmd_get_ip, shell=True, stdout=subprocess.PIPE).communicate()
-        ifconfig_lines = out.decode("utf-8").split("\n")[:-1]
-        ifconfig_ips = [line.split()[1] for line in ifconfig_lines if line.split()[1] != "127.0.0.1"]
-        return ifconfig_ips[0]
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
 
     # Do not call this function explicitly. Instead call run() below.
     def udp_server(self):
