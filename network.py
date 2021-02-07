@@ -6,14 +6,13 @@ from concurrent.futures.thread import ThreadPoolExecutor
 
 from constants import local_port, buffer_size
 from packet import Packet, PacketType
-from tetris import Tetris
 
 
 class Network:
     local_ip = ""
     # IP of the other player
     remote_ip = ""
-    game: Tetris = None
+    game = None
 
     def __init__(self, other_player: int, name="Unanimous"):
         self.executor = ThreadPoolExecutor()
@@ -63,7 +62,9 @@ class Network:
     # This function is the result of the bad code and my lack of understanding of
     # static concept in python. Basically it connects singleton game and network
     # instances. Much better way to do this was to make them static.
-    def connect_network_module_with_game_instance(self, game: Tetris):
+    def connect_network_module_with_game_instance(self, game):
+        from tetris import Tetris
+        game: Tetris
         self.game = game
 
     def handle_udp_packet(self, bytes_packet, address):
