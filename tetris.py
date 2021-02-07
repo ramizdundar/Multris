@@ -1,3 +1,5 @@
+from typing import List
+
 from constants import tetris_x, tetris_y, tetris_zoom, tetris_level, tetris_height, tetris_width
 from figure import Figure
 
@@ -12,10 +14,10 @@ class Tetris:
     width = tetris_width
 
     # Instance variables
-    score = 0
-    state = "start"
-    field = []
-    figures = [Figure(0, 0), Figure(0, 0)]
+    score: int
+    state: str
+    field: List[List[int]]
+    figures: List[Figure] = [None, None]
 
     def __init__(self):
         self.field = []
@@ -28,7 +30,8 @@ class Tetris:
             self.field.append(new_line)
 
     def new_figure(self, ix):
-        self.figures[ix] = Figure(6, 0)
+        self.figures[ix] = Figure(14, 0)
+        self.figures[ix].color = ix + 1
 
     def intersects(self, ix):
         intersection = False
