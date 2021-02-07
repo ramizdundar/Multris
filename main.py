@@ -44,15 +44,19 @@ def run():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    game.rotate(player.player)
+                    if game.state == "start":
+                        game.rotate(player.player)
                 if event.key == pygame.K_DOWN:
                     pressing_down[player.player] = True
                 if event.key == pygame.K_LEFT:
-                    game.go_side(-1, player.player)
+                    if game.state == "start":
+                        game.go_side(-1, player.player)
                 if event.key == pygame.K_RIGHT:
-                    game.go_side(1, player.player)
+                    if game.state == "start":
+                        game.go_side(1, player.player)
                 if event.key == pygame.K_SPACE:
-                    game.go_space(player.player)
+                    if game.state == "start":
+                        game.go_space(player.player)
 
                 if event.key == pygame.K_ESCAPE:
                     game.__init__(network)
@@ -60,8 +64,6 @@ def run():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     pressing_down[player.player] = False
-                if event.key == pygame.K_s:
-                    pressing_down[1 - player.player] = False
 
         display.display(game.score, game.state, game.figures, game.field)
         clock.tick(fps)

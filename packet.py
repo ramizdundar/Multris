@@ -15,3 +15,4 @@ class PacketType(Enum):
     QUIT = 2
     FIGURE = 3
     FREEZE = 4
+    STATE = 5

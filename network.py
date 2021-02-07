@@ -1,6 +1,5 @@
 import pickle
 import socket
-import subprocess
 import threading
 from concurrent.futures.thread import ThreadPoolExecutor
 
@@ -88,3 +87,15 @@ class Network:
             self.game.figures[self.other_player] = packet.payload
         if packet.packet_type == PacketType.FREEZE:
             self.game.freeze_figure(packet.payload)
+        if packet.packet_type == PacketType.STATE:
+            self.handle_state_change(packet.payload)
+
+    def handle_state_change(self, state):
+        if state == "ready":
+            if self.game.state == "wait":
+                pass
+            if self.game.state == "ready":
+                self.game.state = "start"
+        if state == "gameover":
+            if self.game.state == "start":
+                self.game.state = "gameover"

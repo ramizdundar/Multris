@@ -25,7 +25,7 @@ class Tetris:
     def __init__(self, network):
         self.field = []
         self.score = 0
-        self.state = "start"
+        self.state = "wait"
         self.network = network
         self.network.connect_network_module_with_game_instance(self)
 
@@ -109,6 +109,7 @@ class Tetris:
         self.new_figure(ix)
         if self.intersects(ix):
             self.state = "gameover"
+            self.send_state(self.state)
 
     def freeze_figure(self, figure):
         for i in range(4):
@@ -138,6 +139,12 @@ class Tetris:
 
     def update_freeze(self, ix):
         packet = Packet(PacketType.FREEZE, self.figures[ix])
+        self.network.send_udp_packet(packet, self.network.remote_address)
+        self.network.send_udp_packet(packet, self.network.remote_address)
+        self.network.send_udp_packet(packet, self.network.remote_address)
+
+    def send_state(self, state):
+        packet = Packet(PacketType.STATE, state)
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
