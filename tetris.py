@@ -70,12 +70,14 @@ class Tetris:
             self.figures[ix].y += 1
         self.figures[ix].y -= 1
         self.freeze(ix)
+        self.update_remote(ix)
 
     def go_down(self, ix):
         self.figures[ix].y += 1
         if self.intersects(ix):
             self.figures[ix].y -= 1
             self.freeze(ix)
+        self.update_remote(ix)
 
     def freeze(self, ix):
         for i in range(4):
@@ -92,6 +94,7 @@ class Tetris:
         self.figures[ix].x += dx
         if self.intersects(ix):
             self.figures[ix].x = old_x
+        self.update_remote(ix)
 
     def rotate(self, ix):
         old_rotation = self.figures[ix].rotation
@@ -102,4 +105,3 @@ class Tetris:
 
     def update_remote(self, ix):
         self.network.send_udp_packet(Packet(PacketType.FIGURE, self.figures[ix]), self.network.remote_address)
-        print(self.network.remote_address)
