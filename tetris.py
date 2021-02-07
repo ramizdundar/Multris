@@ -102,3 +102,4 @@ class Tetris:
 
     def update_remote(self, ix):
         self.network.send_udp_packet(Packet(PacketType.FIGURE, self.figures[ix]), self.network.remote_address)
+        print(self.network.remote_address)

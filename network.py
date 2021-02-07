@@ -20,6 +20,7 @@ class Network:
         self.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.udp_server_socket.bind((self.local_ip, local_port))
         self.udp_client_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+        self.udp_client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
         Packet.name = name
         self.local_ip = self.get_ip()
@@ -46,11 +47,12 @@ class Network:
     def send_udp_packet(self, packet, address):
         bytes_packet = pickle.dumps(packet)
         self.executor.submit(self.udp_client_socket.sendto, bytes_packet, address)
+        print("SENT: " + str(packet.packet_type) + " TO " + str(address))
 
     def discover(self):
         packet = Packet(PacketType.DISCOVER)
         # address = ("<broadcast>", local_port) TODO: Fix broadcast
-        address = ("192.168.1.8", local_port)
+        address = ("<broadcast>", local_port)
         self.send_udp_packet(packet, address)
         self.send_udp_packet(packet, address)
         self.send_udp_packet(packet, address)
@@ -69,14 +71,15 @@ class Network:
 
     def handle_udp_packet(self, bytes_packet, address):
         packet = pickle.loads(bytes_packet)
+        print("RECEIVED: " + str(packet.packet_type) + " FROM " + str(self.remote_address))
         if packet.packet_type == PacketType.DISCOVER:
-            self.remote_ip = address[0]
-            self.remote_address = (self.remote_ip, local_port)
-            self.send_udp_packet(Packet(PacketType.RESPOND), address)
+            if self.local_ip != address[0]:
+                self.remote_ip = address[0]
+                self.remote_address = (self.remote_ip, local_port)
+                self.send_udp_packet(Packet(PacketType.RESPOND), self.remote_address)
         if packet.packet_type == PacketType.RESPOND:
             self.remote_ip = address[0]
             self.remote_address = (self.remote_ip, local_port)
-            print(self.remote_address)
         if packet.packet_type == PacketType.QUIT:
             self.shutdown = True
         if packet.packet_type == PacketType.FIGURE:
