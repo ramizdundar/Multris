@@ -29,3 +29,10 @@ fps = 30
 
 local_port = 20001
 buffer_size = 1024
+
+player = 0
+
+
+def change_player():
+    global player
+    player = 1 - player

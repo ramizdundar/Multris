@@ -2,7 +2,7 @@ import os
 
 import pygame
 
-from constants import fps, local_port
+from constants import fps, local_port, player
 from display import Display
 from network import Network
 from packet import Packet, PacketType
@@ -15,7 +15,6 @@ def run():
     clock = pygame.time.Clock()
     pygame.display.set_caption("Multris")
 
-    player = 0
     network = Network(1 - player, "Ramiz")  # Other player is 1 - player
     network.run()
     network.discover()
