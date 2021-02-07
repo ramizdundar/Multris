@@ -100,6 +100,7 @@ class Tetris:
         self.update_remote(ix)
 
     def freeze(self, ix):
+        self.update_freeze(ix)
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figures[ix].image():
