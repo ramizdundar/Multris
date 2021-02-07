@@ -25,4 +25,4 @@ tetris_y = 60
 tetris_zoom = 20
 tetris_level = 1
 
-fps = 25
+fps = 30
