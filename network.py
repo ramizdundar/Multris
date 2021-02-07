@@ -80,4 +80,4 @@ class Network:
         if packet.packet_type == PacketType.QUIT:
             self.shutdown = True
         if packet.packet_type == PacketType.FIGURE:
-            self.game.figures[self.other_player] = packet
+            self.game.figures[self.other_player] = packet.payload

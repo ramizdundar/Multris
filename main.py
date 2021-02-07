@@ -15,7 +15,7 @@ def run():
     clock = pygame.time.Clock()
     pygame.display.set_caption("Multris")
 
-    player = 1
+    player = 0
     network = Network(1 - player, "Ramiz")  # Other player is 1 - player
     network.run()
     network.discover()
