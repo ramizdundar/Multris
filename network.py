@@ -13,7 +13,7 @@ class Network:
     # IP of the other player
     remote_ip = ""
 
-    def __init__(self, name):
+    def __init__(self, name="Unanimous"):
         self.server_executor = ThreadPoolExecutor(max_workers=4)
         self.client_executor = ThreadPoolExecutor(max_workers=4)
 
@@ -52,7 +52,7 @@ class Network:
         self.send_udp_packet(packet, address)
 
     def run(self):
-        udp_server_thread = threading.Thread(target=self.udp_server())
+        udp_server_thread = threading.Thread(target=self.udp_server)
         udp_server_thread.start()
 
     def handle_udp_packet(self, bytes_packet, address):

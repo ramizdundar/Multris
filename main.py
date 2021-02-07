@@ -2,6 +2,7 @@ import pygame
 
 from constants import fps
 from display import Display
+from network import Network
 from tetris import Tetris
 
 
@@ -11,6 +12,8 @@ def run():
     clock = pygame.time.Clock()
     pygame.display.set_caption("Multris")
 
+    network = Network("Ramiz")
+    network.run()
     game = Tetris()
     display = Display()
     player = 0
@@ -49,15 +52,15 @@ def run():
                     game.go_space(player)
 
                 if event.key == pygame.K_w:
-                    game.rotate(1-player)
+                    game.rotate(1 - player)
                 if event.key == pygame.K_s:
-                    pressing_down[1-player] = True
+                    pressing_down[1 - player] = True
                 if event.key == pygame.K_a:
-                    game.go_side(-1, 1-player)
+                    game.go_side(-1, 1 - player)
                 if event.key == pygame.K_d:
-                    game.go_side(1, 1-player)
+                    game.go_side(1, 1 - player)
                 if event.key == pygame.K_TAB:
-                    game.go_space(1-player)
+                    game.go_space(1 - player)
 
                 if event.key == pygame.K_ESCAPE:
                     game.__init__()
@@ -66,7 +69,7 @@ def run():
                 if event.key == pygame.K_DOWN:
                     pressing_down[player] = False
                 if event.key == pygame.K_s:
-                    pressing_down[1-player] = False
+                    pressing_down[1 - player] = False
 
         display.display(game.score, game.state, game.figures, game.field)
         clock.tick(fps)
