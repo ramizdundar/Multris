@@ -54,17 +54,6 @@ def run():
                 if event.key == pygame.K_SPACE:
                     game.go_space(player.player)
 
-                if event.key == pygame.K_w:
-                    game.rotate(1 - player.player)
-                if event.key == pygame.K_s:
-                    pressing_down[1 - player.player] = True
-                if event.key == pygame.K_a:
-                    game.go_side(-1, 1 - player.player)
-                if event.key == pygame.K_d:
-                    game.go_side(1, 1 - player.player)
-                if event.key == pygame.K_TAB:
-                    game.go_space(1 - player.player)
-
                 if event.key == pygame.K_ESCAPE:
                     game.__init__(network)
 
