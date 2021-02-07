@@ -14,3 +14,4 @@ class PacketType(Enum):
     RESPOND = 1
     QUIT = 2
     FIGURE = 3
+    FREEZE = 4

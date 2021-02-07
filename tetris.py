@@ -109,6 +109,15 @@ class Tetris:
         if self.intersects(ix):
             self.state = "gameover"
 
+    def freeze_figure(self, figure):
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in figure.image():
+                    if self.field[i + figure.y][j + figure.x] > 0:
+                        return
+                    self.field[i + figure.y][j + figure.x] = figure.color
+        self.break_lines()
+
     def go_side(self, dx, ix):
         old_x = self.figures[ix].x
         self.figures[ix].x += dx
@@ -125,3 +134,9 @@ class Tetris:
 
     def update_remote(self, ix):
         self.network.send_udp_packet(Packet(PacketType.FIGURE, self.figures[ix]), self.network.remote_address)
+
+    def update_freeze(self, ix):
+        packet = Packet(PacketType.FREEZE, self.figures[ix])
+        self.network.send_udp_packet(packet, self.network.remote_address)
+        self.network.send_udp_packet(packet, self.network.remote_address)
+        self.network.send_udp_packet(packet, self.network.remote_address)

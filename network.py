@@ -86,3 +86,5 @@ class Network:
             self.shutdown = True
         if packet.packet_type == PacketType.FIGURE:
             self.game.figures[self.other_player] = packet.payload
+        if packet.packet_type == PacketType.FREEZE:
+            self.game.freeze_figure(packet.payload)
