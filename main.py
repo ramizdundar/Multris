@@ -31,7 +31,6 @@ def run():
         counter += 1
         if counter > 100000:
             counter = 0
-        print(player.player)
         for ix in range(2):
             if game.figures[ix] is None:
                 game.new_figure(ix)

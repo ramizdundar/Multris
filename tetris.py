@@ -36,11 +36,10 @@ class Tetris:
             self.field.append(new_line)
 
     def new_figure(self, ix):
-        self.figures[ix] = Figure(14, 0)
+        self.figures[ix] = Figure(6 + 16 * ix, 0)
         self.figures[ix].color = ix + 1
 
     def intersects(self, ix):
-        intersection = False
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figures[ix].image():
@@ -48,8 +47,24 @@ class Tetris:
                             j + self.figures[ix].x > self.width - 1 or \
                             j + self.figures[ix].x < 0 or \
                             self.field[i + self.figures[ix].y][j + self.figures[ix].x] > 0:
-                        intersection = True
-        return intersection
+                        return True
+
+        return False
+
+    def intersects_with_other_figure(self, ix):
+        other_figure = {}
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.figures[1 - ix].image():
+                    other_figure[str(i + self.figures[1 - ix].y) + "," + str(j + self.figures[1 - ix].x)] = 1
+
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.figures[ix].image():
+                    if str(i + self.figures[ix].y) + "," + str(j + self.figures[ix].x) in other_figure:
+                        return True
+
+        return False
 
     def break_lines(self):
         lines = 0
@@ -66,11 +81,14 @@ class Tetris:
         self.score += lines ** 2
 
     def go_space(self, ix):
-        while not self.intersects(ix):
+        while not (self.intersects(ix) or self.intersects_with_other_figure(ix)):
             self.figures[ix].y += 1
-        self.figures[ix].y -= 1
-        self.freeze(ix)
-        self.update_remote(ix)
+        if self.intersects(ix):
+            self.figures[ix].y -= 1
+            self.freeze(ix)
+            self.update_remote(ix)
+        else:
+            self.figures[ix].y -= 1
 
     def go_down(self, ix):
         self.figures[ix].y += 1
