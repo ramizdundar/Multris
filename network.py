@@ -80,7 +80,7 @@ class Network:
         if packet.packet_type == PacketType.RESPOND:
             self.remote_ip = address[0]
             self.remote_address = (self.remote_ip, local_port)
-            change_player()
+            self.other_player = 1 - change_player()
         if packet.packet_type == PacketType.QUIT:
             self.shutdown = True
         if packet.packet_type == PacketType.FIGURE:

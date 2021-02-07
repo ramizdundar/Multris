@@ -36,3 +36,4 @@ player = 0
 def change_player():
     global player
     player = 1 - player
+    return player
