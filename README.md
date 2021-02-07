@@ -9,7 +9,7 @@ Python 3 is required. Pygame is also required by I highly suggest running the co
 git clone https://github.com/ramizdundar/Multris.git
 cd Multris
 python -m venv venv
-source activate venv/bin/activate
+source venv/bin/activate
 pip install --upgrade pip
 pip install pygame
 ```
@@ -23,4 +23,3 @@ Multris will automatically find and connect games.
 
 ## Gameplay
 Use arrow keys to move or rotate the figure and use space in order to make figure fall botttom. You can use escape key to reset the game.
-
