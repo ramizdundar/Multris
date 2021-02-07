@@ -14,8 +14,7 @@ class Network:
     remote_ip = ""
 
     def __init__(self, name="Unanimous"):
-        self.server_executor = ThreadPoolExecutor(max_workers=4)
-        self.client_executor = ThreadPoolExecutor(max_workers=4)
+        self.executor = ThreadPoolExecutor()
 
         self.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.udp_server_socket.bind((self.local_ip, local_port))
@@ -23,6 +22,8 @@ class Network:
 
         Packet.name = name
         self.local_ip = self.get_ip()
+        self.remote_address = None
+        self.shutdown = False
 
     @staticmethod
     def get_ip():
@@ -34,19 +35,20 @@ class Network:
 
     # Do not call this function explicitly. Instead call run() below.
     def udp_server(self):
-        while True:
+        while not self.shutdown:
             bytes_packet_address_pair = self.udp_server_socket.recvfrom(buffer_size)
             bytes_packet = bytes_packet_address_pair[0]
             address = bytes_packet_address_pair[1]
-            self.server_executor.submit(self.handle_udp_packet, bytes_packet, address)
+            self.executor.submit(self.handle_udp_packet, bytes_packet, address)
 
     def send_udp_packet(self, packet, address):
         bytes_packet = pickle.dumps(packet)
-        self.client_executor.submit(self.udp_client_socket.sendto, bytes_packet, address)
+        self.executor.submit(self.udp_client_socket.sendto, bytes_packet, address)
 
     def discover(self):
         packet = Packet(PacketType.DISCOVER)
-        address = ("<broadcast>", local_port)
+        # address = ("<broadcast>", local_port) TODO: Fix broadcast
+        address = ("192.168.1.8", local_port)
         self.send_udp_packet(packet, address)
         self.send_udp_packet(packet, address)
         self.send_udp_packet(packet, address)
@@ -57,9 +59,13 @@ class Network:
 
     def handle_udp_packet(self, bytes_packet, address):
         packet = pickle.loads(bytes_packet)
-        self.remote_ip = address[0]
-        address = (self.remote_ip, local_port)
         if packet.packet_type == PacketType.DISCOVER:
+            self.remote_ip = address[0]
+            self.remote_address = (self.remote_ip, local_port)
             self.send_udp_packet(Packet(PacketType.RESPOND), address)
         if packet.packet_type == PacketType.RESPOND:
-            pass
+            self.remote_ip = address[0]
+            self.remote_address = (self.remote_ip, local_port)
+            print(self.remote_address)
+        if packet.packet_type == PacketType.QUIT:
+            self.shutdown = True

@@ -12,3 +12,4 @@ class Packet:
 class PacketType(Enum):
     DISCOVER = 0
     RESPOND = 1
+    QUIT = 2

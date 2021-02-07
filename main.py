@@ -1,8 +1,11 @@
+import os
+
 import pygame
 
-from constants import fps
+from constants import fps, local_port
 from display import Display
 from network import Network
+from packet import Packet, PacketType
 from tetris import Tetris
 
 
@@ -14,6 +17,7 @@ def run():
 
     network = Network("Ramiz")
     network.run()
+    network.discover()
     game = Tetris()
     display = Display()
     player = 0
@@ -74,6 +78,8 @@ def run():
         display.display(game.score, game.state, game.figures, game.field)
         clock.tick(fps)
 
+    for i in range(os.cpu_count() + 4):
+        network.send_udp_packet(Packet(PacketType.QUIT), (network.local_ip, local_port))
     pygame.quit()
 
 
