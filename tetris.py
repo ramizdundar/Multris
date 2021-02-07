@@ -26,6 +26,7 @@ class Tetris:
         self.field = []
         self.score = 0
         self.state = "wait"
+        self.remote_state = "wait"  # This state doesn't have to be accurate
         self.network = network
         self.network.connect_network_module_with_game_instance(self)
 
@@ -109,7 +110,7 @@ class Tetris:
         self.new_figure(ix)
         if self.intersects(ix):
             self.state = "gameover"
-            self.send_state(self.state)
+            self.send_state()
 
     def freeze_figure(self, figure):
         for i in range(4):
@@ -143,8 +144,8 @@ class Tetris:
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
 
-    def send_state(self, state):
-        packet = Packet(PacketType.STATE, state)
+    def send_state(self):
+        packet = Packet(PacketType.STATE, self.state)
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)

@@ -61,6 +61,10 @@ def run():
                 if event.key == pygame.K_ESCAPE:
                     game.__init__(network)
 
+                if event.key == pygame.K_r:
+                    game.state = "ready"
+                    game.send_state()
+
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     pressing_down[player.player] = False

@@ -91,9 +91,8 @@ class Network:
             self.handle_state_change(packet.payload)
 
     def handle_state_change(self, state):
+        self.game.remote_state = state
         if state == "ready":
-            if self.game.state == "wait":
-                pass
             if self.game.state == "ready":
                 self.game.state = "start"
         if state == "gameover":
