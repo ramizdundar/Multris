@@ -95,6 +95,8 @@ class Tetris:
         if self.intersects(ix):
             self.figures[ix].y -= 1
             self.freeze(ix)
+        elif self.intersects_with_other_figure(ix):
+            self.figures[ix].y -= 1
         self.update_remote(ix)
 
     def freeze(self, ix):
@@ -110,14 +112,14 @@ class Tetris:
     def go_side(self, dx, ix):
         old_x = self.figures[ix].x
         self.figures[ix].x += dx
-        if self.intersects(ix):
+        if self.intersects(ix) or self.intersects_with_other_figure(ix):
             self.figures[ix].x = old_x
         self.update_remote(ix)
 
     def rotate(self, ix):
         old_rotation = self.figures[ix].rotation
         self.figures[ix].rotate()
-        if self.intersects(ix):
+        if self.intersects(ix) or self.intersects_with_other_figure(ix):
             self.figures[ix].rotation = old_rotation
         self.update_remote(ix)
 
