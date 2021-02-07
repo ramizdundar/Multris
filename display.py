@@ -1,6 +1,7 @@
 import pygame
 
 from constants import size, gray, colors, white, black
+from figure import Figure
 from tetris import Tetris
 
 
@@ -9,7 +10,7 @@ class Display:
     def __init__(self):
         self.game_score = 0
         self.game_state = ""
-        self.game_figure = None
+        self.game_figures = [Figure(0, 0), Figure(0, 0)]
         self.game_field = []
 
         self.screen = pygame.display.set_mode(size)
@@ -30,16 +31,17 @@ class Display:
                                                                                   Tetris.y + Tetris.zoom * i + 1,
                                                                                   Tetris.zoom - 2, Tetris.zoom - 1])
 
-    def display_figure(self):
-        if self.game_figure is not None:
-            for i in range(4):
-                for j in range(4):
-                    p = i * 4 + j
-                    if p in self.game_figure.image():
-                        pygame.draw.rect(self.screen, colors[self.game_figure.color],
-                                         [Tetris.x + Tetris.zoom * (j + self.game_figure.x) + 1,
-                                          Tetris.y + Tetris.zoom * (i + self.game_figure.y) + 1,
-                                          Tetris.zoom - 2, Tetris.zoom - 2])
+    def display_figures(self):
+        for ix in range(2):
+            if self.game_figures[ix] is not None:
+                for i in range(4):
+                    for j in range(4):
+                        p = i * 4 + j
+                        if p in self.game_figures[ix].image():
+                            pygame.draw.rect(self.screen, colors[self.game_figures[ix].color],
+                                             [Tetris.x + Tetris.zoom * (j + self.game_figures[ix].x) + 1,
+                                              Tetris.y + Tetris.zoom * (i + self.game_figures[ix].y) + 1,
+                                              Tetris.zoom - 2, Tetris.zoom - 2])
 
     def display_score(self):
         text = self.font.render("Score: " + str(self.game_score), True, black)
@@ -52,17 +54,17 @@ class Display:
             self.screen.blit(text_game_over, [200, 200])
             self.screen.blit(text_game_over1, [25, 265])
 
-    def update(self, game_score, game_state, game_figure, game_field):
+    def update(self, game_score, game_state, game_figures, game_field):
         self.game_score = game_score
         self.game_state = game_state
-        self.game_figure = game_figure
+        self.game_figures = game_figures
         self.game_field = game_field
 
-    def display(self, game_score, game_state, game_figure, game_field):
-        self.update(game_score, game_state, game_figure, game_field)
+    def display(self, game_score, game_state, game_figures, game_field):
+        self.update(game_score, game_state, game_figures, game_field)
         self.display_reset()
         self.display_field()
-        self.display_figure()
+        self.display_figures()
         self.display_score()
         self.display_game_over_text()
         pygame.display.flip()

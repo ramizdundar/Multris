@@ -15,7 +15,7 @@ class Tetris:
     score = 0
     state = "start"
     field = []
-    figure = None
+    figures = [None, None]
 
     def __init__(self):
         self.field = []
@@ -27,18 +27,18 @@ class Tetris:
                 new_line.append(0)
             self.field.append(new_line)
 
-    def new_figure(self):
-        self.figure = Figure(6, 0)
+    def new_figure(self, ix):
+        self.figures[ix] = Figure(6, 0)
 
-    def intersects(self):
+    def intersects(self, ix):
         intersection = False
         for i in range(4):
             for j in range(4):
-                if i * 4 + j in self.figure.image():
-                    if i + self.figure.y > self.height - 1 or \
-                            j + self.figure.x > self.width - 1 or \
-                            j + self.figure.x < 0 or \
-                            self.field[i + self.figure.y][j + self.figure.x] > 0:
+                if i * 4 + j in self.figures[ix].image():
+                    if i + self.figures[ix].y > self.height - 1 or \
+                            j + self.figures[ix].x > self.width - 1 or \
+                            j + self.figures[ix].x < 0 or \
+                            self.field[i + self.figures[ix].y][j + self.figures[ix].x] > 0:
                         intersection = True
         return intersection
 
@@ -56,36 +56,36 @@ class Tetris:
                         self.field[i1][j] = self.field[i1 - 1][j]
         self.score += lines ** 2
 
-    def go_space(self):
-        while not self.intersects():
-            self.figure.y += 1
-        self.figure.y -= 1
-        self.freeze()
+    def go_space(self, ix):
+        while not self.intersects(ix):
+            self.figures[ix].y += 1
+        self.figures[ix].y -= 1
+        self.freeze(ix)
 
-    def go_down(self):
-        self.figure.y += 1
-        if self.intersects():
-            self.figure.y -= 1
-            self.freeze()
+    def go_down(self, ix):
+        self.figures[ix].y += 1
+        if self.intersects(ix):
+            self.figures[ix].y -= 1
+            self.freeze(ix)
 
-    def freeze(self):
+    def freeze(self, ix):
         for i in range(4):
             for j in range(4):
-                if i * 4 + j in self.figure.image():
-                    self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
+                if i * 4 + j in self.figures[ix].image():
+                    self.field[i + self.figures[ix].y][j + self.figures[ix].x] = self.figures[ix].color
         self.break_lines()
-        self.new_figure()
-        if self.intersects():
+        self.new_figure(ix)
+        if self.intersects(ix):
             self.state = "gameover"
 
-    def go_side(self, dx):
-        old_x = self.figure.x
-        self.figure.x += dx
-        if self.intersects():
-            self.figure.x = old_x
+    def go_side(self, dx, ix):
+        old_x = self.figures[ix].x
+        self.figures[ix].x += dx
+        if self.intersects(ix):
+            self.figures[ix].x = old_x
 
-    def rotate(self):
-        old_rotation = self.figure.rotation
-        self.figure.rotate()
-        if self.intersects():
-            self.figure.rotation = old_rotation
+    def rotate(self, ix):
+        old_rotation = self.figures[ix].rotation
+        self.figures[ix].rotate()
+        if self.intersects(ix):
+            self.figures[ix].rotation = old_rotation
