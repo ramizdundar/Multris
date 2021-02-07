@@ -26,3 +26,6 @@ tetris_zoom = 20
 tetris_level = 1
 
 fps = 30
+
+local_port = 20001
+buffer_size = 1024

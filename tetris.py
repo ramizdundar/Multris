@@ -15,7 +15,7 @@ class Tetris:
     score = 0
     state = "start"
     field = []
-    figures = [None, None]
+    figures = [Figure(0, 0), Figure(0, 0)]
 
     def __init__(self):
         self.field = []
