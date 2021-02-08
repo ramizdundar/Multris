@@ -4,7 +4,7 @@ import threading
 from concurrent.futures.thread import ThreadPoolExecutor
 
 import player
-from constants import local_port, buffer_size
+from constants import local_port, buffer_size, tetris_height, tetris_width
 from packet import Packet, PacketType
 
 
@@ -90,6 +90,8 @@ class Network:
             self.game.freeze_figure(packet.payload)
         if packet.packet_type == PacketType.STATE:
             self.handle_state_change(packet.payload)
+        if packet.packet_type == PacketType.FIELD:
+            self.handle_field(packet.payload)
 
     def handle_state_change(self, state):
         self.game.remote_state = state
@@ -102,3 +104,10 @@ class Network:
                 self.game.state = "gameover"
         if state == "start":
             self.game.state = "start"
+
+    def handle_field(self, field):
+        for i in range(tetris_height):
+            for j in range(tetris_width):
+                # Other player's color is 2 - player
+                if field[i][j] == 2 - player.player:
+                    self.game.field[i][j] = field[i][j]

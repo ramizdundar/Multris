@@ -37,6 +37,7 @@ def run():
             if (counter % (fps // game.level // 2) == 0 and ix == player.player) or pressing_down[ix]:
                 if game.state == "start":
                     game.go_down(ix)
+                    game.send_field()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

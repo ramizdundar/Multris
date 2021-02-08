@@ -16,3 +16,4 @@ class PacketType(Enum):
     FIGURE = 3
     FREEZE = 4
     STATE = 5
+    FIELD = 6

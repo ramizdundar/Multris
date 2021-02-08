@@ -149,3 +149,6 @@ class Tetris:
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
+
+    def send_field(self):
+        self.network.send_udp_packet(Packet(PacketType.FIELD, self.field), self.network.remote_address)
