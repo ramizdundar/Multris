@@ -87,7 +87,7 @@ class Tetris:
         if self.intersects(ix):
             self.figures[ix].y -= 1
             self.freeze(ix)
-            self.update_remote(ix)
+            self.send_remote(ix)
         else:
             self.figures[ix].y -= 1
 
@@ -98,10 +98,10 @@ class Tetris:
             self.freeze(ix)
         elif self.intersects_with_other_figure(ix):
             self.figures[ix].y -= 1
-        self.update_remote(ix)
+        self.send_remote(ix)
 
     def freeze(self, ix):
-        self.update_freeze(ix)
+        self.send_freeze(ix)
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figures[ix].image():
@@ -126,19 +126,19 @@ class Tetris:
         self.figures[ix].x += dx
         if self.intersects(ix) or self.intersects_with_other_figure(ix):
             self.figures[ix].x = old_x
-        self.update_remote(ix)
+        self.send_remote(ix)
 
     def rotate(self, ix):
         old_rotation = self.figures[ix].rotation
         self.figures[ix].rotate()
         if self.intersects(ix) or self.intersects_with_other_figure(ix):
             self.figures[ix].rotation = old_rotation
-        self.update_remote(ix)
+        self.send_remote(ix)
 
-    def update_remote(self, ix):
+    def send_remote(self, ix):
         self.network.send_udp_packet(Packet(PacketType.FIGURE, self.figures[ix]), self.network.remote_address)
 
-    def update_freeze(self, ix):
+    def send_freeze(self, ix):
         packet = Packet(PacketType.FREEZE, self.figures[ix])
         self.network.send_udp_packet(packet, self.network.remote_address)
         self.network.send_udp_packet(packet, self.network.remote_address)
