@@ -96,6 +96,7 @@ class Network:
         if state == "ready":
             if self.game.state == "ready":
                 self.game.state = "start"
+                self.game.send_state()
         if state == "gameover":
             if self.game.state == "start":
                 self.game.state = "gameover"
