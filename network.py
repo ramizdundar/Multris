@@ -106,8 +106,9 @@ class Network:
             self.game.state = "start"
 
     def handle_field(self, field):
-        for i in range(tetris_height):
-            for j in range(tetris_width):
-                # Other player's color is 2 - player
-                if field[i][j] == 2 - player.player:
-                    self.game.field[i][j] = field[i][j]
+        if self.game.state == "start":
+            for i in range(tetris_height):
+                for j in range(tetris_width):
+                    # Other player's color is 2 - player
+                    if field[i][j] == 2 - player.player:
+                        self.game.field[i][j] = field[i][j]
