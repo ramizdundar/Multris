@@ -15,6 +15,7 @@ class Network:
     game = None
 
     def __init__(self, other_player: int, name="Unanimous"):
+
         self.executor = ThreadPoolExecutor()
 
         self.udp_server_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -98,3 +99,5 @@ class Network:
         if state == "gameover":
             if self.game.state == "start":
                 self.game.state = "gameover"
+        if state == "start":
+            self.game.state = "start"

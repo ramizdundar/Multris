@@ -20,8 +20,8 @@ size = (1200, 800)
 # Static tetris class variables
 tetris_height = 32
 tetris_width = 32
-tetris_x = 100
-tetris_y = 60
+tetris_x = 260
+tetris_y = 80
 tetris_zoom = 20
 tetris_level = 1
 

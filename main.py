@@ -67,6 +67,7 @@ def run():
                     game.send_state()
                     if game.remote_state == "ready":
                         game.state = "start"
+                        game.send_state()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:

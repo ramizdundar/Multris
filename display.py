@@ -49,20 +49,20 @@ class Display:
 
     def display_game_over_text(self):
         if self.game_state == "gameover":
-            text_game_over = self.big_font.render("Game Over", True, (255, 125, 0))
-            text_game_over1 = self.big_font.render("Press ESC", True, (255, 215, 0))
-            self.screen.blit(text_game_over, [200, 200])
-            self.screen.blit(text_game_over1, [25, 265])
+            text_game_over = self.big_font.render("Game Over", True, (226, 116, 41))
+            text_game_over1 = self.big_font.render("Press ESC", True, (226, 116, 41))
+            self.screen.blit(text_game_over, [410, 200])
+            self.screen.blit(text_game_over1, [420, 265])
 
     def display_ready_text(self):
         if self.game_state == "wait":
-            text_game_over = self.big_font.render("Press R", True, (255, 125, 0))
-            self.screen.blit(text_game_over, [200, 200])
+            text_game_over = self.big_font.render("Press R", True, (226, 116, 41))
+            self.screen.blit(text_game_over, [460, 200])
 
     def display_waiting_text(self):
         if self.game_state == "ready":
-            text_game_over = self.big_font.render("Waiting for other player", True, (255, 125, 0))
-            self.screen.blit(text_game_over, [200, 200])
+            text_game_over = self.big_font.render("Waiting for another player", True, (226, 116, 41))
+            self.screen.blit(text_game_over, [210, 200])
 
     def update(self, game_score, game_state, game_figures, game_field):
         self.game_score = game_score
