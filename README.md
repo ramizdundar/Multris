@@ -17,7 +17,7 @@ pip3 install pygame
 ## Run
 Just run the setup commands in two different computer and run the command below in both computers
 ```
-python main.py
+python3 main.py
 ```
 Multris will automatically find and connect games.
 
