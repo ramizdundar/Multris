@@ -113,3 +113,5 @@ class Network:
                     # Other player's color is 2 - player
                     if field[i][j] == 2 - player.player:
                         self.game.field[i][j] = field[i][j]
+                    if self.game.field[i][j] == 2 - player.player and field[i][j] == 0:
+                        self.game.field[i][j] = 0
