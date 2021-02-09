@@ -1,5 +1,6 @@
 import pickle
 import socket
+import sys
 import threading
 from concurrent.futures.thread import ThreadPoolExecutor
 
@@ -48,7 +49,7 @@ class Network:
     def send_udp_packet(self, packet, address):
         bytes_packet = pickle.dumps(packet)
         self.executor.submit(self.udp_client_socket.sendto, bytes_packet, address)
-        print("SENT: " + str(packet.packet_type) + " TO " + str(address))
+        print("SENT: " + str(packet.packet_type) + " TO " + str(address) + " SIZE OF " + str(sys.getsizeof(bytes_packet)))
 
     def discover(self):
         packet = Packet(PacketType.DISCOVER)
